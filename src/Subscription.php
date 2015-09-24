@@ -19,7 +19,7 @@ class Subscription
         return $this->client->request('GET', '/subscriptions');
     }
 
-    public function create($parameters)
+    public function create(array $parameters)
     {
         return $this->client->request('POST', '/subscriptions', $parameters);
     }
@@ -30,5 +30,10 @@ class Subscription
             'amount' => 0,
             'card[token]' => $cardToken,
         ]);
+    }
+
+    public function recurring($id, $parameters)
+    {
+        return $this->client->request('POST', "/subscriptions/{$id}/recurring?synchronized", $parameters);
     }
 }
