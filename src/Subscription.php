@@ -23,4 +23,12 @@ class Subscription
     {
         return $this->client->request('POST', '/subscriptions', $parameters);
     }
+
+    public function authorize($id, $cardToken)
+    {
+        return $this->client->request('POST', "/subscriptions/{$id}/authorize?synchronized", [
+            'amount' => 0,
+            'card[token]' => $cardToken,
+        ]);
+    }
 }
