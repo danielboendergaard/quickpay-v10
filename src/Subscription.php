@@ -18,4 +18,9 @@ class Subscription
     {
         return $this->client->request('GET', '/subscriptions');
     }
+
+    public function create($parameters)
+    {
+        return $this->client->request('POST', '/subscriptions', $parameters);
+    }
 }
