@@ -8,6 +8,11 @@ class Form
     const FORM_ACTION = 'https://payment.quickpay.net';
 
     /**
+     * @var string
+     */
+    protected $apiKey;
+
+    /**
      * @var array
      */
     protected $parameters = [
@@ -22,10 +27,12 @@ class Form
     ];
 
     /**
+     * @param string $apiKey
      * @param array $parameters
      */
-    public function __construct(array $parameters)
+    public function __construct($apiKey, array $parameters)
     {
+        $this->apiKey = $apiKey;
         $this->parameters = array_merge($this->parameters, $parameters);
     }
 
@@ -56,5 +63,12 @@ class Form
         }
 
         return implode("\n", $fields);
+    }
+
+    protected function checksum()
+    {
+        ksort($this->parameters);
+
+        return hash_hmac("sha256", implode(' ', $this->parameters), $this->apiKey);
     }
 }
