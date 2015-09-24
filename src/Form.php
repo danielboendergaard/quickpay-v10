@@ -5,9 +5,25 @@ class Form
 {
     const FORM_ACTION = 'https://payment.quickpay.net';
 
-    public function __construct($parameters)
-    {
+    /**
+     * @var array
+     */
+    protected $parameters;
 
+    /**
+     * @param array $parameters
+     */
+    public function __construct(array $parameters)
+    {
+        $this->parameters = $parameters;
+    }
+
+    /**
+     * @return string
+     */
+    public function action()
+    {
+        return static::FORM_ACTION;
     }
 
     /**
@@ -16,7 +32,12 @@ class Form
      */
     public function render()
     {
-        return '';
+        $fields = [];
+        foreach ($this->parameters as $parameter => $value) {
+            $fields[] = sprintf('<input type="hidden" name="%s" value="%s">', $parameter, $value);
+        }
+
+        return implode("\n", $fields);
     }
 
     /**
