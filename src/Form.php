@@ -57,8 +57,8 @@ class Form
             throw new InvalidArgumentException($message);
         }
 
-        $fields = [];
-        foreach ($this->parameters as $parameter => $value) {
+        $parameters = array_merge($this->parameters, ['checksum' => $this->checksum()]);
+        foreach ($parameters as $parameter => $value) {
             $fields[] = sprintf('<input type="hidden" name="%s" value="%s">', $parameter, $value);
         }
 
