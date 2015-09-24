@@ -45,6 +45,21 @@ class Form
     }
 
     /**
+     * @param string|array $name
+     * @param mixed $value
+     */
+    public function variable($name, $value = null)
+    {
+        if (is_array($name)) {
+            foreach ($name as $variableName => $value) {
+                $this->variable($variableName, $value);
+            }
+        } else {
+            $this->parameters["variables[{$name}]"] = $value;
+        }
+    }
+
+    /**
      * Render the form
      * @return string
      */
