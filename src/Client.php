@@ -33,14 +33,25 @@ class Client
         $url = Quickpay::API_URL . $path;
 
         try {
-            $response = $this->client->request($method, $url, [
-                'auth' => ['', $this->apiKey],
-                'headers' => [
-                    'Accept-Version' => 'v10',
-                    'Accept' => 'application/json',
-                ],
-                'form_params' => $parameters,
-            ])->getBody()->getContents();
+            if (method_exists($this->client, 'request')) {
+                $response = $this->client->request($method, $url, [
+                    'auth' => ['', $this->apiKey],
+                    'headers' => [
+                        'Accept-Version' => 'v10',
+                        'Accept' => 'application/json',
+                    ],
+                    'form_params' => $parameters,
+                ])->getBody()->getContents();
+            } else {
+                $response = $this->client->send($this->client->createRequest($method, $url, [
+                    'auth' => ['', $this->apiKey],
+                    'headers' => [
+                        'Accept-Version' => 'v10',
+                        'Accept' => 'application/json',
+                    ],
+                    'body' => $parameters,
+                ]))->getBody()->getContents();
+            }
         } catch (ClientException $e) {
             $response = json_decode($e->getResponse()->getBody()->getContents());
 
