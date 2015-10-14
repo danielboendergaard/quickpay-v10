@@ -23,15 +23,6 @@ class Quickpay
     }
 
     /**
-     * @param array $parameters
-     * @return \Kameli\Quickpay\Form
-     */
-    public function form(array $parameters)
-    {
-        return new Form($parameters);
-    }
-
-    /**
      * @return \Kameli\Quickpay\Callback
      */
     public function callbacks()

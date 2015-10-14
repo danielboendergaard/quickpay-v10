@@ -2,6 +2,7 @@
 namespace Kameli\Quickpay;
 
 use InvalidArgumentException;
+use Symfony\Component\HttpFoundation\Request;
 
 class Form
 {
@@ -11,6 +12,11 @@ class Form
      * @var string
      */
     protected $apiKey;
+
+    /**
+     * @var string
+     */
+    protected $privateKey;
 
     /**
      * @var array
@@ -28,11 +34,13 @@ class Form
 
     /**
      * @param string $apiKey
+     * @param string $privateKey
      * @param array $parameters
      */
-    public function __construct($apiKey, array $parameters)
+    public function __construct($apiKey, $privateKey, array $parameters = [])
     {
         $this->apiKey = $apiKey;
+        $this->privateKey = $privateKey;
         $this->parameters = array_merge($this->parameters, $parameters);
     }
 
@@ -42,6 +50,14 @@ class Form
     public function action()
     {
         return static::FORM_ACTION;
+    }
+
+    /**
+     * @param array $parameters
+     */
+    public function parameters(array $parameters)
+    {
+        $this->parameters = array_merge($this->parameters, $parameters);
     }
 
     /**
@@ -84,6 +100,19 @@ class Form
     {
         ksort($this->parameters);
 
-        return hash_hmac("sha256", implode(' ', $this->parameters), $this->apiKey);
+        return hash_hmac('sha256', implode(' ', $this->parameters), $this->apiKey);
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return bool
+     */
+    public function validateCallback(Request $request)
+    {
+        $input = file_get_contents('php://input');
+
+        $checksum = hash_hmac('sha256', $input, $this->privateKey);
+
+        return $checksum === $request->headers->get('QuickPay-Checksum-Sha256');
     }
 }
