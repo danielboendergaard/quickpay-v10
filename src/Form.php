@@ -33,15 +33,20 @@ class Form
     ];
 
     /**
+     * @param int $merchantId
+     * @param int $agreementId
      * @param string $apiKey
      * @param string $privateKey
-     * @param array $parameters
      */
-    public function __construct($apiKey, $privateKey, array $parameters = [])
+    public function __construct($merchantId, $agreementId, $apiKey, $privateKey)
     {
+        $this->parameters = array_merge($this->parameters, [
+            'merchant_id' => $merchantId,
+            'agreement_id' => $agreementId,
+        ]);
+
         $this->apiKey = $apiKey;
         $this->privateKey = $privateKey;
-        $this->parameters = array_merge($this->parameters, $parameters);
     }
 
     /**
