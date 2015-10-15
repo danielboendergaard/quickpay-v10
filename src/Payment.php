@@ -48,6 +48,34 @@ class Payment
     }
 
     /**
+     * Authorize a payment
+     * @param int $id
+     * @param string $cardToken
+     * @param int $amount
+     * @param bool $autoFee
+     * @return object mixed
+     */
+    public function authorize($id, $cardToken, $amount, $autoFee = true)
+    {
+        return $this->client->request('POST', "/payments/{$id}/authorize?synchronized", [
+            'amount' => $amount,
+            'card[token]' => $cardToken,
+            'autofee' => $autoFee,
+        ]);
+    }
+
+    /**
+     * Capture a payment
+     * @param int $id
+     * @param int $amount
+     * @return object
+     */
+    public function capture($id, $amount)
+    {
+        return $this->client->request('POST', "/payments/{$id}/capture?synchronized", ['amount' => $amount]);
+    }
+
+    /**
      * Create/update a payment link
      * Required parameters: amount
      * @param int $id
