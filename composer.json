@@ -1,6 +1,7 @@
 {
     "name": "kameli/quickpay-v10",
     "description": "A library to communicate with the Danish payment gateway Quickpay",
+    "keywords": ["quickpay", "api", "form", "payment", "gateway", "v10"],
     "license": "MIT",
     "authors": [
         {
