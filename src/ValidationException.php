@@ -6,11 +6,6 @@ use Exception;
 class ValidationException extends \Exception
 {
     /**
-     * @var array
-     */
-    protected $errors = [];
-
-    /**
      * ValidationException constructor.
      * @param array $errors
      * @param string $message
@@ -19,8 +14,8 @@ class ValidationException extends \Exception
      */
     public function __construct($errors, $message, $code, $previous)
     {
+        $message = json_encode($errors);
         parent::__construct($message, $code, $previous);
-        $this->errors = $errors;
     }
 
 }
