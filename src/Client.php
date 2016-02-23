@@ -55,6 +55,10 @@ class Client
         } catch (ClientException $e) {
             $response = json_decode($e->getResponse()->getBody()->getContents());
 
+            if (strpos($response->message, 'Validation error') !== null) {
+                throw new ValidationException($response->errors, $response->message, $e->getCode(), $e);
+            }
+
             throw new ErrorException($response->message);
         }
 
