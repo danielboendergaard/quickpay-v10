@@ -62,9 +62,9 @@ class Client
 
                 throw new ErrorException($response->message);
                 
-            }elseif (isset($response->error)) {
+            } elseif (isset($response->error)) {
                 throw new ErrorException($response->error);
-            }else {
+            } else {
                 throw new ErrorException($e->getMessage());
             }
         }
