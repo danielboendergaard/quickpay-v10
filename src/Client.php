@@ -56,15 +56,15 @@ class Client
             $response = json_decode($e->getResponse()->getBody()->getContents());
 
             if (isset($response->message)) {
-                if(strpos($response->message, 'Validation error') !== null) {
+                if (strpos($response->message, 'Validation error') !== null) {
                     throw new ValidationException($response->errors, $response->message, $e->getCode(), $e);
                 }
 
                 throw new ErrorException($response->message);
                 
-            }elseif(isset($response->error)){
-                throw new ErrorException($response->error);  
-            }else{
+            }elseif (isset($response->error)) {
+                throw new ErrorException($response->error);
+            }else {
                 throw new ErrorException($e->getMessage());
             }
         }
