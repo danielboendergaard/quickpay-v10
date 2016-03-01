@@ -61,7 +61,6 @@ class Client
                 }
 
                 throw new ErrorException($response->message);
-                
             } elseif (isset($response->error)) {
                 throw new ErrorException($response->error);
             } else {
