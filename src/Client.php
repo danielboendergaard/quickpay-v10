@@ -2,9 +2,11 @@
 
 namespace Kameli\Quickpay;
 
-use ErrorException;
+use Exception;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ClientException;
+use Kameli\Quickpay\Exceptions\UnauthorizedException;
+use Kameli\Quickpay\Exceptions\ValidationException;
 
 class Client
 {
@@ -56,15 +58,23 @@ class Client
             $response = json_decode($e->getResponse()->getBody()->getContents());
 
             if (isset($response->message)) {
-                if (strpos($response->message, 'Validation error') !== null) {
-                    throw new ValidationException($response->errors, $response->message, $e->getCode(), $e);
+                if (strpos($response->message, 'Invalid API key') === 0) {
+                    throw new UnauthorizedException($response->message);
                 }
 
-                throw new ErrorException($response->message);
+                if (strpos($response->message, 'Not authorized') === 0) {
+                    throw new UnauthorizedException($response->message);
+                }
+
+                if (strpos($response->message, 'Validation error') === 0) {
+                    throw new ValidationException($response->errors);
+                }
+
+                throw new Exception($response->message);
             } elseif (isset($response->error)) {
-                throw new ErrorException($response->error);
+                throw new Exception($response->error);
             } else {
-                throw new ErrorException($e->getMessage());
+                throw new Exception($e->getMessage());
             }
         }
 
