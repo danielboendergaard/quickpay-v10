@@ -15,11 +15,18 @@ class Quickpay
     protected $client;
 
     /**
-     * @param string $apiKey
+     * @var string
      */
-    public function __construct($apiKey)
+    private $privateKey;
+
+    /**
+     * @param string $apiKey
+     * @param string $privateKey
+     */
+    public function __construct($apiKey, $privateKey = null)
     {
         $this->client = new Client(new GuzzleClient, $apiKey);
+        $this->privateKey = $privateKey;
     }
 
     /**
@@ -27,7 +34,7 @@ class Quickpay
      */
     public function callbacks()
     {
-        return new Callback($this->client);
+        return new Callback($this->client, $this->privateKey);
     }
 
     /**
