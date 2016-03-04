@@ -52,7 +52,7 @@ class Payment extends Entity
      */
     public function variable($name, $default = null)
     {
-        return isset($this->variables->{$name}) ? $this->variables{$name} : $default;
+        return isset($this->variables->{$name}) ? $this->variables->{$name} : $default;
     }
 
     /**
