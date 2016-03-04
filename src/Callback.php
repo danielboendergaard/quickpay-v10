@@ -3,7 +3,6 @@
 namespace Kameli\Quickpay;
 
 use Symfony\Component\HttpFoundation\Request;
-use UnexpectedValueException;
 
 class Callback
 {
@@ -47,20 +46,12 @@ class Callback
     }
 
     /**
-     * Validate a callback request
+     * Receive the callback request and create CallbackRequest object
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return bool
+     * @return \Kameli\Quickpay\CallbackRequest
      */
-    public function validate(Request $request)
+    public function receiveRequest(Request $request)
     {
-        if (! isset($this->privateKey)) {
-            throw new UnexpectedValueException('privateKey must be set to validate a callback');
-        }
-
-        $input = file_get_contents('php://input');
-
-        $checksum = hash_hmac('sha256', $input, $this->privateKey);
-
-        return $checksum === $request->headers->get('QuickPay-Checksum-Sha256');
+        return new CallbackRequest($request, $this->privateKey);
     }
 }
