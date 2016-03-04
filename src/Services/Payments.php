@@ -1,50 +1,40 @@
 <?php
 
-namespace Kameli\Quickpay;
+namespace Kameli\Quickpay\Services;
 
-class Payment
+use Kameli\Quickpay\Entities\Payment;
+use Kameli\Quickpay\Entities\PaymentLink;
+
+class Payments extends Service
 {
-    /**
-     * @var \Kameli\Quickpay\Client
-     */
-    protected $client;
-
-    /**
-     * @param \Kameli\Quickpay\Client $client
-     */
-    public function __construct(Client $client)
-    {
-        $this->client = $client;
-    }
-
     /**
      * Get all payments
      * @return array
      */
     public function all()
     {
-        return $this->client->request('GET', '/payments');
+        return $this->createCollection($this->client->request('GET', '/payments'), Payment::class);
     }
 
     /**
      * Get payment
      * @param int $id
-     * @return object
+     * @return \Kameli\Quickpay\Entities\Payment
      */
     public function get($id)
     {
-        return $this->client->request('GET', "/payments/{$id}");
+        return new Payment($this->client->request('GET', "/payments/{$id}"));
     }
 
     /**
      * Create a payment
      * Required parameters: currency, order_id
      * @param array $parameters
-     * @return object
+     * @return \Kameli\Quickpay\Entities\Payment
      */
     public function create($parameters)
     {
-        return $this->client->request('POST', '/payments', $parameters);
+        return new Payment($this->client->request('POST', '/payments', $parameters));
     }
 
     /**
@@ -57,22 +47,24 @@ class Payment
      */
     public function authorize($id, $cardToken, $amount, $autoFee = true)
     {
-        return $this->client->request('POST', "/payments/{$id}/authorize?synchronized", [
+        return new Payment($this->client->request('POST', "/payments/{$id}/authorize?synchronized", [
             'amount' => $amount,
             'card[token]' => $cardToken,
             'autofee' => $autoFee,
-        ]);
+        ]));
     }
 
     /**
      * Capture a payment
      * @param int $id
      * @param int $amount
-     * @return object
+     * @return \Kameli\Quickpay\Entities\Payment
      */
     public function capture($id, $amount)
     {
-        return $this->client->request('POST', "/payments/{$id}/capture?synchronized", ['amount' => $amount]);
+        return new Payment(
+            $this->client->request('POST', "/payments/{$id}/capture?synchronized", ['amount' => $amount])
+        );
     }
 
     /**
@@ -80,10 +72,10 @@ class Payment
      * Required parameters: amount
      * @param int $id
      * @param array $parameters
-     * @return object
+     * @return \Kameli\Quickpay\Entities\PaymentLink
      */
     public function link($id, $parameters)
     {
-        return $this->client->request('PUT', "/payments/{$id}/link", $parameters);
+        return new PaymentLink($this->client->request('PUT', "/payments/{$id}/link", $parameters));
     }
 }

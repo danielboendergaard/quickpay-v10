@@ -1,8 +1,10 @@
 <?php
 
-namespace Kameli\Quickpay;
+namespace Kameli\Quickpay\Services;
 
-class Subscription
+use Kameli\Quickpay\Client;
+
+class Subscriptions
 {
     /**
      * @var \Kameli\Quickpay\Client

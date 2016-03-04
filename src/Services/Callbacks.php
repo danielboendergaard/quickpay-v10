@@ -1,10 +1,10 @@
 <?php
 
-namespace Kameli\Quickpay;
+namespace Kameli\Quickpay\Services;
 
-use Symfony\Component\HttpFoundation\Request;
+use Kameli\Quickpay\Client;
 
-class Callback
+class Callbacks
 {
     /**
      * @var \Kameli\Quickpay\Client
@@ -45,13 +45,4 @@ class Callback
         return $this->client->request('PATCH', "/callbacks/{$id}/retry");
     }
 
-    /**
-     * Receive the callback request and create CallbackRequest object
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return \Kameli\Quickpay\CallbackRequest
-     */
-    public function receiveRequest(Request $request)
-    {
-        return new CallbackRequest($request, $this->privateKey);
-    }
 }

@@ -3,6 +3,12 @@
 namespace Kameli\Quickpay;
 
 use GuzzleHttp\Client as GuzzleClient;
+use Kameli\Quickpay\Entities\Payment;
+use Kameli\Quickpay\Services\Callbacks;
+use Kameli\Quickpay\Services\Payments;
+use Kameli\Quickpay\Services\Subscriptions;
+use Symfony\Component\HttpFoundation\Request;
+use UnexpectedValueException;
 
 class Quickpay
 {
@@ -30,26 +36,56 @@ class Quickpay
     }
 
     /**
-     * @return \Kameli\Quickpay\Callback
+     * @return \Kameli\Quickpay\Services\Callbacks
      */
     public function callbacks()
     {
-        return new Callback($this->client, $this->privateKey);
+        return new Callbacks($this->client, $this->privateKey);
     }
-
+    
     /**
-     * @return \Kameli\Quickpay\Subscription
-     */
-    public function subscriptions()
-    {
-        return new Subscription($this->client);
-    }
-
-    /**
-     * @return \Kameli\Quickpay\Payment
+     * @return \Kameli\Quickpay\Services\Payments
      */
     public function payments()
     {
-        return new Payment($this->client);
+        return new Payments($this->client);
+    }
+    
+    /**
+     * @return \Kameli\Quickpay\Services\Subscriptions
+     */
+    public function subscriptions()
+    {
+        return new Subscriptions($this->client);
+    }
+
+    /**
+     * Receive the callback request and return the payment
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Kameli\Quickpay\Entities\Payment
+     */
+    public function receiveCallback(Request $request)
+    {
+        if (! $this->validateCallback($request)) {
+            throw new UnexpectedValueException('The callback request is invalid');
+        }
+
+        return new Payment(json_decode($request->getContent()));
+    }
+
+    /**
+     * Validate a callback request
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return bool
+     */
+    public function validateCallback(Request $request)
+    {
+        if (! isset($this->privateKey)) {
+            throw new UnexpectedValueException('privateKey must be set to validate a callback');
+        }
+
+        $checksum = hash_hmac('sha256', $request->getContent(), $this->privateKey);
+
+        return $checksum === $request->headers->get('QuickPay-Checksum-Sha256');
     }
 }
