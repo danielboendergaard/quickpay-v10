@@ -114,9 +114,7 @@ class Form
      */
     public function validateCallback(Request $request)
     {
-        $input = file_get_contents('php://input');
-
-        $checksum = hash_hmac('sha256', $input, $this->privateKey);
+        $checksum = hash_hmac('sha256', $request->getContent(), $this->privateKey);
 
         return $checksum === $request->headers->get('QuickPay-Checksum-Sha256');
     }
