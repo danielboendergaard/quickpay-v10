@@ -69,5 +69,12 @@ class Payment extends Entity
 
         return null;
     }
-    
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 }
