@@ -28,6 +28,16 @@ class Subscriptions
         return $this->client->request('GET', '/subscriptions');
     }
 
+   /**
+     * Get subscription
+     * @param int $id
+     * @return \Kameli\Quickpay\Entities\Subscription
+     */
+    public function get($id)
+    {
+        return new Subscription($this->client->request('GET', "/subscriptions/{$id}"));
+    }
+
     /**
      * Create a subscription
      * Required parameters: order_id, currency, description
