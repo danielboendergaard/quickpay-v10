@@ -31,7 +31,7 @@ class Subscriptions
    /**
      * Get subscription
      * @param int $id
-     * @return \Kameli\Quickpay\Entities\Subscription
+     * @return Object
      */
     public function get($id)
     {
