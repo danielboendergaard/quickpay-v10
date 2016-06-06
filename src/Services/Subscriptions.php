@@ -35,7 +35,7 @@ class Subscriptions
      */
     public function get($id)
     {
-        return new Subscription($this->client->request('GET', "/subscriptions/{$id}"));
+        return $this->client->request('GET', "/subscriptions/{$id}");
     }
 
     /**
