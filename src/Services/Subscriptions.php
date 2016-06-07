@@ -28,6 +28,16 @@ class Subscriptions
         return $this->client->request('GET', '/subscriptions');
     }
 
+   /**
+     * Get subscription
+     * @param int $id
+     * @return Object
+     */
+    public function get($id)
+    {
+        return $this->client->request('GET', "/subscriptions/{$id}");
+    }
+
     /**
      * Create a subscription
      * Required parameters: order_id, currency, description
