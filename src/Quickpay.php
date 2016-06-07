@@ -64,8 +64,10 @@ class Quickpay
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Kameli\Quickpay\Entities\Payment
      */
-    public function receiveCallback(Request $request)
+    public function receiveCallback(Request $request = null)
     {
+        $request = $request ?: Request::createFromGlobals();
+
         if (! $this->validateCallback($request)) {
             throw new UnexpectedValueException('The callback request is invalid');
         }
@@ -78,8 +80,10 @@ class Quickpay
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return bool
      */
-    public function validateCallback(Request $request)
+    public function validateCallback(Request $request = null)
     {
+        $request = $request ?: Request::createFromGlobals();
+        
         if (! isset($this->privateKey)) {
             throw new UnexpectedValueException('privateKey must be set to validate a callback');
         }
