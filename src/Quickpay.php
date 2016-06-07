@@ -86,6 +86,6 @@ class Quickpay
 
         $checksum = hash_hmac('sha256', $request->getContent(), $this->privateKey);
 
-        return $checksum === $request->headers->get('QuickPay-Checksum-Sha256');
+        return $checksum === $request->headers->server('HTTP_QUICKPAY_CHECKSUM_SHA256');
     }
 }
