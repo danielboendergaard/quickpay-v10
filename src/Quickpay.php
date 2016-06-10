@@ -40,7 +40,7 @@ class Quickpay
      */
     public function callbacks()
     {
-        return new Callbacks($this->client, $this->privateKey);
+        return new Callbacks($this->client);
     }
     
     /**

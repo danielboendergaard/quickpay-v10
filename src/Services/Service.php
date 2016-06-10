@@ -12,18 +12,11 @@ abstract class Service
     protected $client;
 
     /**
-     * @var string
-     */
-    protected $privateKey;
-
-    /**
      * @param \Kameli\Quickpay\Client $client
-     * @param string $privateKey
      */
-    public function __construct(Client $client, $privateKey = null)
+    public function __construct(Client $client)
     {
         $this->client = $client;
-        $this->privateKey = $privateKey;
     }
     
     /**
