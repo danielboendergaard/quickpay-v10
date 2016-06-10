@@ -2,47 +2,26 @@
 
 namespace Kameli\Quickpay\Services;
 
-use Kameli\Quickpay\Client;
+use Kameli\Quickpay\Entities\Callback;
 
-class Callbacks
+class Callbacks extends Service
 {
     /**
-     * @var \Kameli\Quickpay\Client
-     */
-    protected $client;
-
-    /**
-     * @var string
-     */
-    protected $privateKey;
-
-    /**
-     * @param \Kameli\Quickpay\Client $client
-     * @param string $privateKey
-     */
-    public function __construct(Client $client, $privateKey = null)
-    {
-        $this->client = $client;
-        $this->privateKey = $privateKey;
-    }
-
-    /**
      * Get failed and queued callbacks
-     * @return array
+     * @return \Kameli\Quickpay\Entities\Callback[]
      */
     public function all()
     {
-        return $this->client->request('GET', '/callbacks');
+        return $this->createCollection($this->client->request('GET', '/callbacks'), Callback::class);
     }
 
     /**
      * Retry failed callback
      * @param int $id
-     * @return object
+     * @return \Kameli\Quickpay\Entities\Callback
      */
     public function retry($id)
     {
-        return $this->client->request('PATCH', "/callbacks/{$id}/retry");
+        return new Callback($this->client->request('PATCH', "/callbacks/{$id}/retry"));
     }
-
 }

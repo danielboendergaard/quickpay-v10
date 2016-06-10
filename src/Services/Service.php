@@ -1,4 +1,5 @@
 <?php
+
 namespace Kameli\Quickpay\Services;
 
 use Kameli\Quickpay\Client;
@@ -11,11 +12,18 @@ abstract class Service
     protected $client;
 
     /**
-     * @param \Kameli\Quickpay\Client $client
+     * @var string
      */
-    public function __construct(Client $client)
+    protected $privateKey;
+
+    /**
+     * @param \Kameli\Quickpay\Client $client
+     * @param string $privateKey
+     */
+    public function __construct(Client $client, $privateKey = null)
     {
         $this->client = $client;
+        $this->privateKey = $privateKey;
     }
     
     /**
