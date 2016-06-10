@@ -2,77 +2,30 @@
 
 namespace Kameli\Quickpay\Services;
 
-use Kameli\Quickpay\Client;
+use Kameli\Quickpay\Entities\Payment;
+use Kameli\Quickpay\Entities\PaymentLink;
+use Kameli\Quickpay\Entities\Subscription;
 
-class Subscriptions
+class Subscriptions extends Service
 {
     /**
-     * @var \Kameli\Quickpay\Client
-     */
-    protected $client;
-
-    /**
-     * @param \Kameli\Quickpay\Client $client
-     */
-    public function __construct(Client $client)
-    {
-        $this->client = $client;
-    }
-
-    /**
      * Get all subscriptions
-     * @return array
+     * @return \Kameli\Quickpay\Entities\Subscription[]
      */
     public function all()
     {
-        return $this->client->request('GET', '/subscriptions');
-    }
-
-   /**
-     * Get subscription
-     * @param int $id
-     * @return Object
-     */
-    public function get($id)
-    {
-        return $this->client->request('GET', "/subscriptions/{$id}");
+        return $this->createCollection($this->client->request('GET', '/subscriptions'), Subscription::class);
     }
 
     /**
      * Create a subscription
      * Required parameters: order_id, currency, description
      * @param array $parameters
-     * @return object
+     * @return \Kameli\Quickpay\Entities\Subscription
      */
     public function create($parameters)
     {
-        return $this->client->request('POST', '/subscriptions', $parameters);
-    }
-
-    /**
-     * Authorize a subscription
-     * @param int $id
-     * @param string $cardToken
-     * @return object
-     */
-    public function authorize($id, $cardToken)
-    {
-        return $this->client->request('POST', "/subscriptions/{$id}/authorize?synchronized", [
-            'amount' => 0,
-            'card[token]' => $cardToken,
-        ]);
-    }
-
-    /**
-     * Create a subscription recurring payment
-     * Required parameters: amount, order_id
-     * @param int $id
-     * @param array $parameters
-     * @return object
-     */
-    public function recurring($id, $parameters)
-    {
-        return $this->client->request('POST', "/subscriptions/{$id}/recurring?synchronized", $parameters);
+        return new Subscription($this->client->request('POST', '/subscriptions', $parameters));
     }
 
     /**
@@ -80,10 +33,94 @@ class Subscriptions
      * Required parameters: amount
      * @param int $id
      * @param array $parameters
-     * @return object
+     * @return \Kameli\Quickpay\Entities\PaymentLink
      */
     public function link($id, $parameters)
     {
-        return $this->client->request('PUT', "/subscriptions/{$id}/link", $parameters);
+        return new PaymentLink($this->client->request('PUT', "/subscriptions/{$id}/link", $parameters));
+    }
+
+    /**
+    * Get subscription
+    * @param int $id
+    * @return \Kameli\Quickpay\Entities\Subscription
+    */
+    public function get($id)
+    {
+        return new Subscription($this->client->request('GET', "/subscriptions/{$id}"));
+    }
+
+    /**
+     * Update a subscription
+     * @param int $id
+     * @param array $parameters
+     * @return \Kameli\Quickpay\Entities\Subscription
+     */
+    public function update($id, $parameters)
+    {
+        return new Subscription($this->client->request('PATCH', "/subscriptions/{$id}", $parameters));
+    }
+
+    /**
+     * Create a subscription session
+     * Required parameters: amount
+     * @param int $id
+     * @param array $parameters
+     * @return \Kameli\Quickpay\Entities\Subscription
+     */
+    public function session($id, $parameters)
+    {
+        return new Subscription(
+            $this->client->request('POST', "/subscriptions/{$id}/session?synchronized", $parameters)
+        );
+    }
+
+    /**
+     * Authorize a subscription
+     * Required parameters: amount
+     * @param int $id
+     * @param array $parameters
+     * @return \Kameli\Quickpay\Entities\Subscription
+     */
+    public function authorize($id, $parameters)
+    {
+        return new Subscription(
+            $this->client->request('POST', "/subscriptions/{$id}/authorize?synchronized", $parameters)
+        );
+    }
+
+    /**
+     * Cancel a subscription
+     * @param int $id
+     * @param array $parameters
+     * @return \Kameli\Quickpay\Entities\Subscription
+     */
+    public function cancel($id, $parameters = [])
+    {
+        return new Subscription(
+            $this->client->request('POST', "/subscriptions/{$id}/cancel?synchronized", $parameters)
+        );
+    }
+
+    /**
+     * Create a subscription recurring payment
+     * Required parameters: amount, order_id
+     * @param int $id
+     * @param array $parameters
+     * @return \Kameli\Quickpay\Entities\Payment
+     */
+    public function recurring($id, $parameters)
+    {
+        return new Payment($this->client->request('POST', "/subscriptions/{$id}/recurring?synchronized", $parameters));
+    }
+
+    /**
+     * Get all subscription payments
+     * @param int $id
+     * @return \Kameli\Quickpay\Entities\Payment[]
+     */
+    public function payments($id)
+    {
+        return $this->createCollection($this->client->request('GET', "/subscriptions/{$id}/payments"), Payment::class);
     }
 }
