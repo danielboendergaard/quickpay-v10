@@ -1,4 +1,5 @@
 <?php
+
 namespace Kameli\Quickpay\Exceptions;
 
 use Exception;
