@@ -1,27 +1,39 @@
 # Quickpay V10
 
-### Not complete - Still under development
+####Features:
+* Access the Quickpay API
+	- Manage Payments
+	- Manage Subscriptions
+	- Get and retry failed callbacks
+* Geneate payment links
+* Validate callbacks
+* Generate payment forms
 
-A few examples:
+##Examples
+
+### Process a payment via payment link (prefered method)
+
 ````php
 <?php
 
 use Kameli\Quickpay\Quickpay;
 
-$qp = new Quickpay('API_KEY');
-
-// Create a payment
-$payment = $qp->payments->create([
-	'currency' => 'DKK',
-    'order_id' => 'ORDER_ID',
+$qp = new Quickpay('API_KEY', 'PRIVATE_KEY');
+$payment = $qp->payments()->create([
+    'currency' => 'DKK',
+    'order_id' => 'SOME_UNIQUE_ORDER_ID',
 ]);
 
-// Authorize a payment from embedded form
-$payment = $qp->payments()->authorize($payment->id, 'CARD_TOKEN', AMOUNT);
+$link = $qp->payments()->link($payment->getId(), [
+    'amount' => 10000, // amount in least valuable unit (øre)
+]);
 
-// Create a payment link
-$link = $qp->payments()->link($payment->id, [
-	'amount' => AMOUNT,
-])
+// Make the user follow the payment link which will take them to a form where you put in their card details
+$url = $link->getUrl();
 
+// When the form has been completed, a POST request will be sent to a specified url where you will validate it
+if ($qp->validateCallback()) {
+    $payment = $qp->receiveCallback();
+    // Handle order
+}
 ````
