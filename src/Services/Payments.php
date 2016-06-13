@@ -108,6 +108,16 @@ class Payments extends Service
     }
 
     /**
+     * Capture a payment's entire amount
+     * @param \Kameli\Quickpay\Entities\Payment $payment
+     * @return \Kameli\Quickpay\Entities\Payment
+     */
+    public function capturePayment(Payment $payment)
+    {
+        return $this->captureAmount($payment->getId(), $payment->amount());
+    }
+
+    /**
      * Refund a payment
      * Required parameters: amount
      * @param int $id
