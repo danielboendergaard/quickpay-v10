@@ -27,5 +27,11 @@ namespace Kameli\Quickpay\Entities;
  */
 class Subscription extends Entity
 {
-
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 }

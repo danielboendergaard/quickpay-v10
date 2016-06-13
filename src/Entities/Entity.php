@@ -4,7 +4,7 @@ namespace Kameli\Quickpay\Entities;
 abstract class Entity
 {
     /**
-     * @param array $data
+     * @param array|object $data
      */
     public function __construct($data)
     {

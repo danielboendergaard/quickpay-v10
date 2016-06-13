@@ -2,7 +2,7 @@
 
 namespace Kameli\Quickpay\Entities;
 
-class PaymentLink extends Entity
+class Link extends Entity
 {
     /**
      * @var string

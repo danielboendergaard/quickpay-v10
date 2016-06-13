@@ -63,8 +63,8 @@ class Payment extends Entity
     public function amount()
     {
         foreach ($this->operations as $operation) {
-            if ($operation->type == 'authorize') {
-                return $operation->amount / 100;
+            if (in_array($operation->type, ['authorize', 'recurring'])) {
+                return $operation->amount;
             }
         }
 

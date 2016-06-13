@@ -3,7 +3,7 @@
 namespace Kameli\Quickpay\Services;
 
 use Kameli\Quickpay\Entities\Payment;
-use Kameli\Quickpay\Entities\PaymentLink;
+use Kameli\Quickpay\Entities\Link;
 use Kameli\Quickpay\Entities\Subscription;
 
 class Subscriptions extends Service
@@ -33,11 +33,11 @@ class Subscriptions extends Service
      * Required parameters: amount
      * @param int $id
      * @param array $parameters
-     * @return \Kameli\Quickpay\Entities\PaymentLink
+     * @return \Kameli\Quickpay\Entities\Link
      */
     public function link($id, $parameters)
     {
-        return new PaymentLink($this->client->request('PUT', "/subscriptions/{$id}/link", $parameters));
+        return new Link($this->client->request('PUT', "/subscriptions/{$id}/link", $parameters));
     }
 
     /**

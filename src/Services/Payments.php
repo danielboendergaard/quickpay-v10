@@ -3,7 +3,7 @@
 namespace Kameli\Quickpay\Services;
 
 use Kameli\Quickpay\Entities\Payment;
-use Kameli\Quickpay\Entities\PaymentLink;
+use Kameli\Quickpay\Entities\Link;
 
 class Payments extends Service
 {
@@ -32,11 +32,11 @@ class Payments extends Service
      * Required parameters: amount
      * @param int $id
      * @param array $parameters
-     * @return \Kameli\Quickpay\Entities\PaymentLink
+     * @return \Kameli\Quickpay\Entities\Link
      */
     public function link($id, $parameters)
     {
-        return new PaymentLink($this->client->request('PUT', "/payments/{$id}/link", $parameters));
+        return new Link($this->client->request('PUT', "/payments/{$id}/link", $parameters));
     }
 
     /**
@@ -86,6 +86,7 @@ class Payments extends Service
 
     /**
      * Capture a payment
+     * Required parameters: amount
      * @param int $id
      * @param array $parameters
      * @return \Kameli\Quickpay\Entities\Payment

@@ -4,6 +4,7 @@ namespace Kameli\Quickpay;
 
 use GuzzleHttp\Client as GuzzleClient;
 use Kameli\Quickpay\Entities\Payment;
+use Kameli\Quickpay\Entities\Subscription;
 use Kameli\Quickpay\Services\Callbacks;
 use Kameli\Quickpay\Services\Payments;
 use Kameli\Quickpay\Services\Subscriptions;
@@ -64,7 +65,27 @@ class Quickpay
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Kameli\Quickpay\Entities\Payment
      */
-    public function receiveCallback(Request $request = null)
+    public function receivePaymentCallback(Request $request = null)
+    {
+        return new Payment($this->receiveCallback($request));
+    }
+
+    /**
+     * Receive the callback request and return the subscription
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Kameli\Quickpay\Entities\Subscription
+     */
+    public function receiveSubscriptionCallback(Request $request = null)
+    {
+        return new Subscription($this->receiveCallback($request));
+    }
+
+    /**
+     * Receive the callback request and return the response
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return object
+     */
+    protected function receiveCallback(Request $request = null)
     {
         $request = $request ?: Request::createFromGlobals();
 
@@ -72,7 +93,7 @@ class Quickpay
             throw new UnexpectedValueException('The callback request is invalid');
         }
 
-        return new Payment(json_decode($request->getContent()));
+        return json_decode($request->getContent());
     }
 
     /**
