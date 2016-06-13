@@ -95,9 +95,9 @@ class Form
         }
 
         $parameters = array_merge($this->parameters, ['checksum' => $this->checksum()]);
-        foreach ($parameters as $parameter => $value) {
-            $fields[] = sprintf('<input type="hidden" name="%s" value="%s">', $parameter, $value);
-        }
+        $fields = array_map(function ($name, $value) {
+            return sprintf('<input type="hidden" name="%s" value="%s">', $name, $value);
+        }, array_keys($parameters), $parameters);
 
         return implode("\n", $fields);
     }
