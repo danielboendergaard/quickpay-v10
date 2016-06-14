@@ -5,11 +5,11 @@ namespace Kameli\Quickpay;
 use GuzzleHttp\Client as GuzzleClient;
 use Kameli\Quickpay\Entities\Payment;
 use Kameli\Quickpay\Entities\Subscription;
+use Kameli\Quickpay\Exceptions\InvalidCallbackException;
 use Kameli\Quickpay\Services\Callbacks;
 use Kameli\Quickpay\Services\Payments;
 use Kameli\Quickpay\Services\Subscriptions;
 use Symfony\Component\HttpFoundation\Request;
-use UnexpectedValueException;
 
 class Quickpay
 {
@@ -84,13 +84,14 @@ class Quickpay
      * Receive the callback request and return the response
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return object
+     * @throws \Kameli\Quickpay\Exceptions\InvalidCallbackException
      */
     protected function receiveCallback(Request $request = null)
     {
         $request = $request ?: Request::createFromGlobals();
 
         if (! $this->validateCallback($request)) {
-            throw new UnexpectedValueException('The callback request is invalid');
+            throw new InvalidCallbackException('The callback request is invalid');
         }
 
         return json_decode($request->getContent());
@@ -100,13 +101,14 @@ class Quickpay
      * Validate a callback request
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return bool
+     * @throws \Kameli\Quickpay\Exceptions\InvalidCallbackException
      */
     public function validateCallback(Request $request = null)
     {
         $request = $request ?: Request::createFromGlobals();
         
         if (! isset($this->privateKey)) {
-            throw new UnexpectedValueException('privateKey must be set to validate a callback');
+            throw new InvalidCallbackException('privateKey must be set to validate a callback');
         }
 
         $checksum = hash_hmac('sha256', $request->getContent(), $this->privateKey);
