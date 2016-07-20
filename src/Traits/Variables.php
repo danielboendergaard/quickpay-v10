@@ -4,6 +4,9 @@ namespace Kameli\Quickpay\Traits;
 
 trait Variables
 {
+    /** @var object */
+    protected $variables;
+
     /**
      * Get a specific variable
      * @param string $name

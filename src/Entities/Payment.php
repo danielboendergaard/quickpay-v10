@@ -12,7 +12,6 @@ use Kameli\Quickpay\Traits\Variables;
  * @property string type
  * @property string text_on_statement
  * @property int branding_id
- * @property array variables
  * @property string currency
  * @property string state
  * @property object metadata
