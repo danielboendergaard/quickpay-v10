@@ -25,6 +25,7 @@ class Subscriptions extends Service
      */
     public function create($parameters)
     {
+        $parameters = $this->encodeVariables($parameters);
         return new Subscription($this->client->request('POST', '/subscriptions', $parameters));
     }
 
@@ -58,6 +59,7 @@ class Subscriptions extends Service
      */
     public function update($id, $parameters)
     {
+        $parameters = $this->encodeVariables($parameters);
         return new Subscription($this->client->request('PATCH', "/subscriptions/{$id}", $parameters));
     }
 

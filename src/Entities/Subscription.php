@@ -2,6 +2,8 @@
 
 namespace Kameli\Quickpay\Entities;
 
+use Kameli\Quickpay\Traits\Variables;
+
 /**
  * @property int id
  * @property int merchant_id
@@ -27,6 +29,8 @@ namespace Kameli\Quickpay\Entities;
  */
 class Subscription extends Entity
 {
+    use Variables;
+
     /**
      * @return int
      */

@@ -24,6 +24,7 @@ class Payments extends Service
      */
     public function create($parameters)
     {
+        $parameters = $this->encodeVariables($parameters);
         return new Payment($this->client->request('POST', '/payments', $parameters));
     }
 
@@ -57,6 +58,7 @@ class Payments extends Service
      */
     public function update($id, $parameters)
     {
+        $parameters = $this->encodeVariables($parameters);
         return new Payment($this->client->request('PATCH', "/payments/{$id}", $parameters));
     }
 

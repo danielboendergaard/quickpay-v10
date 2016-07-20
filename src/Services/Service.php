@@ -31,4 +31,18 @@ abstract class Service
             return new $class($data);
         }, $collection);
     }
+
+    /**
+     * Encode variables to JSON
+     * @param array $parameters
+     * @return array mixed
+     */
+    protected function encodeVariables($parameters)
+    {
+        if (isset($parameters['variables'])) {
+            $parameters['variables'] = array_map('json_encode', $parameters['variables']);
+        }
+
+        return $parameters;
+    }
 }

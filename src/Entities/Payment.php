@@ -2,6 +2,8 @@
 
 namespace Kameli\Quickpay\Entities;
 
+use Kameli\Quickpay\Traits\Variables;
+
 /**
  * @property int id
  * @property int merchant_id
@@ -27,6 +29,8 @@ namespace Kameli\Quickpay\Entities;
  */
 class Payment extends Entity
 {
+    use Variables;
+
     /**
      * Check if a payment has been authorized
      * @return bool
@@ -43,17 +47,6 @@ class Payment extends Entity
     public function authorizedTest()
     {
         return $this->accepted && $this->test_mode;
-    }
-
-    /**
-     * Get a specific variable
-     * @param string $name
-     * @param mixed $default
-     * @return mixed
-     */
-    public function variable($name, $default = null)
-    {
-        return isset($this->variables->{$name}) ? $this->variables->{$name} : $default;
     }
 
     /**
