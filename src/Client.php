@@ -32,7 +32,7 @@ class Client
 
     public function request($method, $path, $parameters = [])
     {
-        $url = Quickpay::API_URL . $path;
+        $url = Quickpay::API_URL . ltrim($path, '/');
 
         try {
             if (method_exists($this->client, 'request')) {
