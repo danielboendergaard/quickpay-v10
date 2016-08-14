@@ -2,7 +2,6 @@
 
 namespace Kameli\Quickpay;
 
-use GuzzleHttp\Client as GuzzleClient;
 use Kameli\Quickpay\Entities\Payment;
 use Kameli\Quickpay\Entities\Subscription;
 use Kameli\Quickpay\Exceptions\InvalidCallbackException;
@@ -31,7 +30,7 @@ class Quickpay
      */
     public function __construct($apiKey, $privateKey = null)
     {
-        $this->client = new Client(new GuzzleClient, $apiKey);
+        $this->client = new Client($apiKey);
         $this->privateKey = $privateKey;
     }
 
