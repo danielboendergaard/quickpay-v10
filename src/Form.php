@@ -3,7 +3,6 @@
 namespace Kameli\Quickpay;
 
 use InvalidArgumentException;
-use Symfony\Component\HttpFoundation\Request;
 
 class Form
 {
@@ -110,13 +109,14 @@ class Form
     }
 
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param string $requestBody
      * @return bool
      */
-    public function validateCallback(Request $request)
+    public function validateCallback($requestBody = null)
     {
-        $checksum = hash_hmac('sha256', $request->getContent(), $this->privateKey);
+        $requestBody = $requestBody ?: file_get_contents('php://input');
+        $checksum = hash_hmac('sha256', $requestBody, $this->privateKey);
 
-        return $checksum === $request->headers->get('QuickPay-Checksum-Sha256');
+        return $checksum === $_SERVER['HTTP_QUICKPAY_CHECKSUM_SHA256'];
     }
 }

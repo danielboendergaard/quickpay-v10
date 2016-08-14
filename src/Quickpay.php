@@ -9,7 +9,6 @@ use Kameli\Quickpay\Exceptions\InvalidCallbackException;
 use Kameli\Quickpay\Services\Callbacks;
 use Kameli\Quickpay\Services\Payments;
 use Kameli\Quickpay\Services\Subscriptions;
-use Symfony\Component\HttpFoundation\Request;
 
 class Quickpay
 {
@@ -62,57 +61,57 @@ class Quickpay
 
     /**
      * Receive the callback request and return the payment
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param string $requestBody
      * @return \Kameli\Quickpay\Entities\Payment
      */
-    public function receivePaymentCallback(Request $request = null)
+    public function receivePaymentCallback($requestBody = null)
     {
-        return new Payment($this->receiveCallback($request));
+        return new Payment($this->receiveCallback($requestBody));
     }
 
     /**
      * Receive the callback request and return the subscription
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param string $requestBody
      * @return \Kameli\Quickpay\Entities\Subscription
      */
-    public function receiveSubscriptionCallback(Request $request = null)
+    public function receiveSubscriptionCallback($requestBody = null)
     {
-        return new Subscription($this->receiveCallback($request));
+        return new Subscription($this->receiveCallback($requestBody));
     }
 
     /**
      * Receive the callback request and return the response
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param string $requestBody
      * @return object
      * @throws \Kameli\Quickpay\Exceptions\InvalidCallbackException
      */
-    protected function receiveCallback(Request $request = null)
+    protected function receiveCallback($requestBody = null)
     {
-        $request = $request ?: Request::createFromGlobals();
+        $requestBody = $requestBody ?: file_get_contents('php://input');
 
-        if (! $this->validateCallback($request)) {
+        if (! $this->validateCallback($requestBody)) {
             throw new InvalidCallbackException('The callback request is invalid');
         }
 
-        return json_decode($request->getContent());
+        return json_decode($requestBody);
     }
 
     /**
      * Validate a callback request
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param string $requestBody
      * @return bool
      * @throws \Kameli\Quickpay\Exceptions\InvalidCallbackException
      */
-    public function validateCallback(Request $request = null)
+    public function validateCallback($requestBody = null)
     {
-        $request = $request ?: Request::createFromGlobals();
-        
+        $requestBody = $requestBody ?: file_get_contents('php://input');
+
         if (! isset($this->privateKey)) {
             throw new InvalidCallbackException('privateKey must be set to validate a callback');
         }
 
-        $checksum = hash_hmac('sha256', $request->getContent(), $this->privateKey);
+        $checksum = hash_hmac('sha256', $requestBody, $this->privateKey);
 
-        return $checksum === $request->headers->get('QuickPay-Checksum-Sha256');
+        return $checksum === $_SERVER['HTTP_QUICKPAY_CHECKSUM_SHA256'];
     }
 }
