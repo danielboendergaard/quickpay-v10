@@ -11,6 +11,9 @@
 
 Go to the official QuickPay documentation to explore all endpoints and options: http://tech.quickpay.net/api/services/?scope=merchant
 
+## Installation
+`composer require kameli/quickpay-v10`
+
 ## Examples
 
 ### Process a payment
