@@ -1,6 +1,6 @@
 # Quickpay V10
 
-####Features:
+#### Features:
 * Access the Quickpay API
 	- Manage Payments
 	- Manage Subscriptions
@@ -11,7 +11,7 @@
 
 Go to the official QuickPay documentation to explore all endpoints and options: http://tech.quickpay.net/api/services/?scope=merchant
 
-##Examples
+## Examples
 
 ### Process a payment
 
