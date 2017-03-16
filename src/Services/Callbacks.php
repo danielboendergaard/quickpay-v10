@@ -8,11 +8,12 @@ class Callbacks extends Service
 {
     /**
      * Get failed and queued callbacks
+     * @param array $parameters
      * @return \Kameli\Quickpay\Entities\Callback[]
      */
-    public function all()
+    public function all($parameters = null)
     {
-        return $this->createCollection($this->client->request('GET', '/callbacks'), Callback::class);
+        return $this->createCollection($this->client->request('GET', '/callbacks', $parameters), Callback::class);
     }
 
     /**

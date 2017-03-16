@@ -10,11 +10,14 @@ class Subscriptions extends Service
 {
     /**
      * Get all subscriptions
+     * @param array $parameters
      * @return \Kameli\Quickpay\Entities\Subscription[]
      */
-    public function all()
+    public function all($parameters = null)
     {
-        return $this->createCollection($this->client->request('GET', '/subscriptions'), Subscription::class);
+        return $this->createCollection(
+            $this->client->request('GET', '/subscriptions', $parameters), Subscription::class
+        );
     }
 
     /**

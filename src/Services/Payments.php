@@ -9,11 +9,12 @@ class Payments extends Service
 {
     /**
      * Get all payments
+     * @param array $parameters
      * @return \Kameli\Quickpay\Entities\Payment[]
      */
-    public function all()
+    public function all($parameters = null)
     {
-        return $this->createCollection($this->client->request('GET', '/payments'), Payment::class);
+        return $this->createCollection($this->client->request('GET', '/payments', $parameters), Payment::class);
     }
 
     /**
