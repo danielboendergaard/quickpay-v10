@@ -4,6 +4,7 @@ namespace Kameli\Quickpay\Services;
 
 use Kameli\Quickpay\Entities\Payment;
 use Kameli\Quickpay\Entities\Link;
+use Kameli\Quickpay\Exceptions\NotFoundException;
 
 class Payments extends Service
 {
@@ -49,6 +50,23 @@ class Payments extends Service
     public function get($id)
     {
         return new Payment($this->client->request('GET', "/payments/{$id}"));
+    }
+
+    /**
+     * Get a payment by the order id
+     * @param string $orderId
+     * @return \Kameli\Quickpay\Entities\Payment
+     * @throws \Kameli\Quickpay\Exceptions\NotFoundException
+     */
+    public function getByOrderId($orderId)
+    {
+        $payments = $this->all(['order_id' => $orderId]);
+
+        if (! count($payments)) {
+            throw new NotFoundException("No payment exists with order id {$orderId}");
+        }
+
+        return $payments[0];
     }
 
     /**
