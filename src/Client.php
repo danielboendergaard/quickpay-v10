@@ -51,7 +51,7 @@ class Client
      * Make a request to the Quickpay API
      * @param string $method
      * @param string $path
-     * @param array $parameters
+     * @param array|null $parameters
      * @return mixed
      * @throws \Exception
      * @throws \Kameli\Quickpay\Exceptions\UnauthorizedException
