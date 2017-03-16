@@ -3,6 +3,7 @@
 namespace Kameli\Quickpay;
 
 use Exception;
+use Kameli\Quickpay\Exceptions\NotFoundException;
 use Kameli\Quickpay\Exceptions\UnauthorizedException;
 use Kameli\Quickpay\Exceptions\ValidationException;
 
@@ -81,6 +82,8 @@ class Client
                 throw new ValidationException($body->message, $body->errors, $body->error_code);
             case 401:
                 throw new UnauthorizedException($body->message);
+            case 404:
+                throw new NotFoundException($body->message);
         }
 
         throw new Exception(json_encode($body));
