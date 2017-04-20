@@ -1,4 +1,5 @@
 <?php
+
 namespace Kameli\Quickpay\Entities;
 
 abstract class Entity
