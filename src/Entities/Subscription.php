@@ -12,7 +12,6 @@ use Kameli\Quickpay\Traits\Variables;
  * @property string type
  * @property string text_on_statement
  * @property int branding_id
- * @property array variables
  * @property string currency
  * @property string state
  * @property object metadata
@@ -20,12 +19,17 @@ use Kameli\Quickpay\Traits\Variables;
  * @property string shipping_address
  * @property string invoice_address
  * @property array basket
+ * @property array shipping
  * @property array operations
  * @property bool test_mode
  * @property string acquirer
  * @property string facilitator
  * @property string created_at
+ * @property string updated_at
+ * @property string retented_at
  * @property string description
+ * @property array group_ids
+ * @property string deadline_at
  */
 class Subscription extends Entity
 {

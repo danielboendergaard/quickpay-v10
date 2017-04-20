@@ -19,12 +19,18 @@ use Kameli\Quickpay\Traits\Variables;
  * @property string shipping_address
  * @property string invoice_address
  * @property array basket
+ * @property array shipping
  * @property array operations
  * @property bool test_mode
  * @property string acquirer
  * @property string facilitator
  * @property string created_at
+ * @property string updated_at
+ * @property string retented_at
  * @property int balance
+ * @property int fee
+ * @property int subscription_id
+ * @property string deadline_at
  */
 class Payment extends Entity
 {
