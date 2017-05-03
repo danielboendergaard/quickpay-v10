@@ -17,9 +17,21 @@ class ValidationException extends Exception
      */
     public function __construct($message, $errors, $errorCode)
     {
-        $this->message = $message;
+        $this->setMessage($message, $errors);
         $this->errors = $errors;
         $this->errorCode = $errorCode;
+    }
+
+    /**
+     * Set the exception message
+     * @param string $message
+     * @param array $errors
+     */
+    public function setMessage($message, $errors)
+    {
+        $this->message = $message . ': ' . implode(', ', array_map(function ($error, $attribute) {
+            return $attribute . ': ' . implode(', ', $error);
+        }, $errors, array_keys($errors)));
     }
 
     /**

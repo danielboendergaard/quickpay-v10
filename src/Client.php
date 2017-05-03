@@ -79,7 +79,7 @@ class Client
 
         switch ($statusCode) {
             case 400:
-                throw new ValidationException($body->message, $body->errors, $body->error_code);
+                throw new ValidationException($body->message, (array) $body->errors, $body->error_code);
             case 401:
                 throw new UnauthorizedException($body->message);
             case 404:
