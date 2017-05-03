@@ -83,7 +83,13 @@ class Client
             case 401:
                 throw new UnauthorizedException($body->message);
             case 404:
-                throw new NotFoundException($body->message);
+                if (isset($body->message)) {
+                    throw new NotFoundException($body->message);
+                } elseif (isset($body->error)) {
+                    throw new NotFoundException($body->error);
+                }
+
+                throw new NotFoundException(json_encode($body));
         }
 
         throw new Exception(json_encode($body));
