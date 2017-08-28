@@ -70,6 +70,15 @@ class Payment extends Entity
     }
 
     /**
+     * Get the originally requested amount (before added fee)
+     * @return int
+     */
+    public function originalAmount()
+    {
+        return $this->balance - (int) $this->fee;
+    }
+
+    /**
      * @return int
      */
     public function getId()
