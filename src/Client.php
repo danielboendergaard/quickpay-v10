@@ -2,8 +2,8 @@
 
 namespace Kameli\Quickpay;
 
-use Exception;
 use Kameli\Quickpay\Exceptions\NotFoundException;
+use Kameli\Quickpay\Exceptions\QuickpayException;
 use Kameli\Quickpay\Exceptions\UnauthorizedException;
 use Kameli\Quickpay\Exceptions\ValidationException;
 
@@ -92,6 +92,6 @@ class Client
                 throw new NotFoundException(json_encode($body));
         }
 
-        throw new Exception(json_encode($body));
+        throw new QuickpayException('An invalid response was received from Quickpay', $response, $statusCode);
     }
 }
