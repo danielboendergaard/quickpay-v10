@@ -10,11 +10,11 @@
         }
     ],
     "require": {
-        "php": ">=5.4",
+        "php": ">=5.5",
         "ext-curl": "*"
     },
     "require-dev": {
-        "symfony/var-dumper": "^2.7"
+        "symfony/var-dumper": "*"
     },
     "autoload": {
         "psr-4": {

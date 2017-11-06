@@ -52,12 +52,14 @@ class Client
      * @param string $method
      * @param string $path
      * @param array|null $parameters
+     * @param bool $raw
      * @return mixed
-     * @throws \Exception
+     * @throws \Kameli\Quickpay\Exceptions\NotFoundException
+     * @throws \Kameli\Quickpay\Exceptions\QuickpayException
      * @throws \Kameli\Quickpay\Exceptions\UnauthorizedException
      * @throws \Kameli\Quickpay\Exceptions\ValidationException
      */
-    public function request($method, $path, $parameters = [])
+    public function request($method, $path, $parameters = [], $raw = false)
     {
         $url = Quickpay::API_URL . ltrim($path, '/');
 
@@ -65,33 +67,58 @@ class Client
         curl_setopt($this->curl, CURLOPT_URL, $url);
 
         if ($parameters) {
-            curl_setopt($this->curl, CURLOPT_POSTFIELDS, http_build_query($parameters, '', '&'));
+            $files = count(array_filter($parameters, function ($parameter) {
+                return $parameter instanceof \CURLFile;
+            }));
+
+            curl_setopt($this->curl, CURLOPT_POSTFIELDS, $files ? $parameters : http_build_query($parameters, '', '&'));
         }
 
         $response = curl_exec($this->curl);
 
         $statusCode = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
-        $body = json_decode(substr($response, - curl_getinfo($this->curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD)));
-
-        if (in_array($statusCode, [200, 201, 202])) {
-            return $body;
-        }
+        $body = substr($response, - curl_getinfo($this->curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD));
+        $json = json_decode($body);
 
         switch ($statusCode) {
-            case 400:
-                throw new ValidationException($body->message, (array) $body->errors, $body->error_code);
-            case 401:
-                throw new UnauthorizedException($body->message);
-            case 404:
-                if (isset($body->message)) {
-                    throw new NotFoundException($body->message);
-                } elseif (isset($body->error)) {
-                    throw new NotFoundException($body->error);
+            case 200:
+            case 201:
+            case 202:
+                if ($raw) {
+                    return $body;
                 }
 
-                throw new NotFoundException(json_encode($body));
+                return $json;
+            case 400:
+                throw new ValidationException($json->message, (array) $json->errors, $json->error_code);
+            case 401:
+                throw new UnauthorizedException($json->message);
+            case 404:
+                if (isset($json->message)) {
+                    throw new NotFoundException($json->message);
+                } elseif (isset($json->error)) {
+                    throw new NotFoundException($json->error);
+                }
+
+                throw new NotFoundException(json_encode($json));
         }
 
         throw new QuickpayException('An invalid response was received from Quickpay', $response, $statusCode);
+    }
+
+    /**
+     * Make a request to the Quickpay API and get the response as text
+     * @param string $method
+     * @param string $path
+     * @param array|null $parameters
+     * @return mixed
+     * @throws \Kameli\Quickpay\Exceptions\NotFoundException
+     * @throws \Kameli\Quickpay\Exceptions\QuickpayException
+     * @throws \Kameli\Quickpay\Exceptions\UnauthorizedException
+     * @throws \Kameli\Quickpay\Exceptions\ValidationException
+     */
+    public function requestRaw($method, $path, $parameters = [])
+    {
+        return $this->request($method, $path, $parameters, true);
     }
 }

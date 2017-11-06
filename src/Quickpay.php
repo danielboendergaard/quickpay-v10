@@ -5,6 +5,7 @@ namespace Kameli\Quickpay;
 use Kameli\Quickpay\Entities\Payment;
 use Kameli\Quickpay\Entities\Subscription;
 use Kameli\Quickpay\Exceptions\InvalidCallbackException;
+use Kameli\Quickpay\Services\Brandings;
 use Kameli\Quickpay\Services\Callbacks;
 use Kameli\Quickpay\Services\Payments;
 use Kameli\Quickpay\Services\Subscriptions;
@@ -32,6 +33,14 @@ class Quickpay
     {
         $this->client = new Client($apiKey);
         $this->privateKey = $privateKey;
+    }
+
+    /**
+     * @return \Kameli\Quickpay\Services\Brandings
+     */
+    public function brandings()
+    {
+        return new Brandings($this->client);
     }
 
     /**
