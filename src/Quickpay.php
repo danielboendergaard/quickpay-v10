@@ -6,7 +6,6 @@ use Kameli\Quickpay\Entities\Payment;
 use Kameli\Quickpay\Entities\Subscription;
 use Kameli\Quickpay\Exceptions\InvalidCallbackException;
 use Kameli\Quickpay\Services\Brandings;
-use Kameli\Quickpay\Services\Callbacks;
 use Kameli\Quickpay\Services\Payments;
 use Kameli\Quickpay\Services\Subscriptions;
 
@@ -43,14 +42,6 @@ class Quickpay
         return new Brandings($this->client);
     }
 
-    /**
-     * @return \Kameli\Quickpay\Services\Callbacks
-     */
-    public function callbacks()
-    {
-        return new Callbacks($this->client);
-    }
-    
     /**
      * @return \Kameli\Quickpay\Services\Payments
      */
