@@ -12,4 +12,12 @@ class QuickpayException extends \Exception
         $this->response = $response;
         parent::__construct($message, $statusCode);
     }
+
+    /**
+     * @return string
+     */
+    public function getResponse()
+    {
+        return $this->response;
+    }
 }
