@@ -14,7 +14,8 @@
         "ext-curl": "*"
     },
     "require-dev": {
-        "symfony/var-dumper": "*"
+        "symfony/var-dumper": "^4.3",
+        "tightenco/collect": "^5.8"
     },
     "autoload": {
         "psr-4": {
