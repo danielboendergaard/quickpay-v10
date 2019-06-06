@@ -5,6 +5,7 @@ namespace Kameli\Quickpay;
 use Kameli\Quickpay\Exceptions\NotFoundException;
 use Kameli\Quickpay\Exceptions\QuickpayException;
 use Kameli\Quickpay\Exceptions\UnauthorizedException;
+use Kameli\Quickpay\Exceptions\UnavailableException;
 use Kameli\Quickpay\Exceptions\ValidationException;
 
 class Client
@@ -57,6 +58,7 @@ class Client
      * @throws \Kameli\Quickpay\Exceptions\NotFoundException
      * @throws \Kameli\Quickpay\Exceptions\QuickpayException
      * @throws \Kameli\Quickpay\Exceptions\UnauthorizedException
+     * @throws \Kameli\Quickpay\Exceptions\UnavailableException
      * @throws \Kameli\Quickpay\Exceptions\ValidationException
      */
     public function request($method, $path, $parameters = [], $raw = false)
@@ -84,11 +86,7 @@ class Client
             case 200:
             case 201:
             case 202:
-                if ($raw) {
-                    return $body;
-                }
-
-                return $json;
+                return $raw ? $body : $json;
             case 400:
                 throw new ValidationException($json->message, (array) $json->errors, $json->error_code);
             case 401:
@@ -101,6 +99,10 @@ class Client
                 }
 
                 throw new NotFoundException(json_encode($json));
+            case 500:
+            case 502:
+            case 504:
+                throw new UnavailableException($body);
         }
 
         throw new QuickpayException('An invalid response was received from Quickpay', $response, $statusCode);
@@ -115,6 +117,7 @@ class Client
      * @throws \Kameli\Quickpay\Exceptions\NotFoundException
      * @throws \Kameli\Quickpay\Exceptions\QuickpayException
      * @throws \Kameli\Quickpay\Exceptions\UnauthorizedException
+     * @throws \Kameli\Quickpay\Exceptions\UnavailableException
      * @throws \Kameli\Quickpay\Exceptions\ValidationException
      */
     public function requestRaw($method, $path, $parameters = [])
