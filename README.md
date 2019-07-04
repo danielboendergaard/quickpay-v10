@@ -49,6 +49,8 @@ if ($qp->validateCallback()) {
 
 ### Create a subscription and make recurring payments
 
+*Remember to enable subscriptions for the acquirer you are using.*
+
 ````php
 <?php
 
