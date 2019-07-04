@@ -2,10 +2,11 @@
 
 #### Features:
 * Access the Quickpay API
-	- Manage Payments
-	- Manage Subscriptions
-	- Get and retry failed callbacks
-* Geneate payment links
+	- Payments
+	- Subscriptions
+	- Cards
+	- Brandings
+* Generate payment links
 * Validate callbacks
 * Generate payment forms
 
