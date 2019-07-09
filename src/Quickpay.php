@@ -2,6 +2,7 @@
 
 namespace Kameli\Quickpay;
 
+use Kameli\Quickpay\Entities\Card;
 use Kameli\Quickpay\Entities\Payment;
 use Kameli\Quickpay\Entities\Subscription;
 use Kameli\Quickpay\Exceptions\InvalidCallbackException;
@@ -85,6 +86,16 @@ class Quickpay
     public function receiveSubscriptionCallback($requestBody = null)
     {
         return new Subscription($this->receiveCallback($requestBody));
+    }
+
+    /**
+     * Receive the callback request and return the card
+     * @param string $requestBody
+     * @return \Kameli\Quickpay\Entities\Card
+     */
+    public function receiveCardCallback($requestBody = null)
+    {
+        return new Card($this->receiveCallback($requestBody));
     }
 
     /**
