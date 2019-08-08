@@ -26,6 +26,7 @@ class Cards extends Service
      */
     public function create($parameters = [])
     {
+        $parameters = $this->encodeVariables($parameters);
         return new Card($this->client->request('POST', '/cards', $parameters));
     }
 
@@ -48,6 +49,7 @@ class Cards extends Service
      */
     public function update($id, $parameters)
     {
+        $parameters = $this->encodeVariables($parameters);
         return new Card($this->client->request('PATCH', "/cards/{$id}", $parameters));
     }
 
