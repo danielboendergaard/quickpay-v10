@@ -5,6 +5,7 @@
 	- Payments
 	- Subscriptions
 	- Cards
+	- Payouts
 	- Brandings
 * Generate payment links
 * Validate callbacks
