@@ -61,7 +61,7 @@ class Quickpay
     {
         return new Payouts($this->client);
     }
-    
+
     /**
      * @return \Kameli\Quickpay\Services\Subscriptions
      */
