@@ -15,8 +15,8 @@
         "ext-json": "*"
     },
     "require-dev": {
-        "symfony/var-dumper": "^4.3",
-        "tightenco/collect": "^5.8"
+        "symfony/var-dumper": "^6.2",
+        "illuminate/collections": "^9.42.2"
     },
     "autoload": {
         "psr-4": {
