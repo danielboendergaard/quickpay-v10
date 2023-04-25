@@ -118,6 +118,18 @@ class Payments extends Service
     }
 
     /**
+     * Capture a payment asynchronously
+     * Required parameters: amount
+     * @param int $id
+     * @param array $parameters
+     * @return \Kameli\Quickpay\Entities\Payment
+     */
+    public function captureAsync($id, $parameters)
+    {
+        return new Payment($this->client->request('POST', "/payments/{$id}/capture", $parameters));
+    }
+
+    /**
      * Capture a payment with specified amount
      * @param int $id
      * @param int $amount
