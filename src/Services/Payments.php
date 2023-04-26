@@ -78,6 +78,7 @@ class Payments extends Service
     public function update($id, $parameters)
     {
         $parameters = $this->encodeVariables($parameters);
+
         return new Payment($this->client->request('PATCH', "/payments/{$id}", $parameters));
     }
 
@@ -86,11 +87,14 @@ class Payments extends Service
      * Required parameters: amount
      * @param int $id
      * @param array $parameters
+     * @param bool $async
      * @return \Kameli\Quickpay\Entities\Payment
      */
-    public function session($id, $parameters)
+    public function session($id, $parameters, $async = false)
     {
-        return new Payment($this->client->request('POST', "/payments/{$id}/session?synchronized", $parameters));
+        $query = $async ? '' : '?synchronized';
+
+        return new Payment($this->client->request('POST', "/payments/{$id}/session{$query}", $parameters));
     }
 
     /**
@@ -98,11 +102,14 @@ class Payments extends Service
      * Required parameters: amount
      * @param int $id
      * @param array $parameters
+     * @param bool $async
      * @return \Kameli\Quickpay\Entities\Payment
      */
-    public function authorize($id, $parameters)
+    public function authorize($id, $parameters, $async = false)
     {
-        return new Payment($this->client->request('POST', "/payments/{$id}/authorize?synchronized", $parameters));
+        $query = $async ? '' : '?synchronized';
+
+        return new Payment($this->client->request('POST', "/payments/{$id}/authorize{$query}", $parameters));
     }
 
     /**
@@ -110,44 +117,37 @@ class Payments extends Service
      * Required parameters: amount
      * @param int $id
      * @param array $parameters
+     * @param bool $async
      * @return \Kameli\Quickpay\Entities\Payment
      */
-    public function capture($id, $parameters)
+    public function capture($id, $parameters, $async = false)
     {
-        return new Payment($this->client->request('POST', "/payments/{$id}/capture?synchronized", $parameters));
-    }
+        $query = $async ? '' : '?synchronized';
 
-    /**
-     * Capture a payment asynchronously
-     * Required parameters: amount
-     * @param int $id
-     * @param array $parameters
-     * @return \Kameli\Quickpay\Entities\Payment
-     */
-    public function captureAsync($id, $parameters)
-    {
-        return new Payment($this->client->request('POST', "/payments/{$id}/capture", $parameters));
+        return new Payment($this->client->request('POST', "/payments/{$id}/capture{$query}", $parameters));
     }
 
     /**
      * Capture a payment with specified amount
      * @param int $id
      * @param int $amount
+     * @param bool $async
      * @return \Kameli\Quickpay\Entities\Payment
      */
-    public function captureAmount($id, $amount)
+    public function captureAmount($id, $amount, $async = false)
     {
-        return $this->capture($id, ['amount' => $amount]);
+        return $this->capture($id, ['amount' => $amount], $async);
     }
 
     /**
      * Capture a payment's entire amount
      * @param \Kameli\Quickpay\Entities\Payment $payment
+     * @param bool $async
      * @return \Kameli\Quickpay\Entities\Payment
      */
-    public function capturePayment(Payment $payment)
+    public function capturePayment(Payment $payment, $async = false)
     {
-        return $this->captureAmount($payment->getId(), $payment->amount());
+        return $this->captureAmount($payment->getId(), $payment->amount(), $async);
     }
 
     /**
@@ -155,43 +155,53 @@ class Payments extends Service
      * Required parameters: amount
      * @param int $id
      * @param array $parameters
+     * @param bool $async
      * @return \Kameli\Quickpay\Entities\Payment
      */
-    public function refund($id, $parameters)
+    public function refund($id, $parameters, $async = false)
     {
-        return new Payment($this->client->request('POST', "/payments/{$id}/refund?synchronized", $parameters));
+        $query = $async ? '' : '?synchronized';
+
+        return new Payment($this->client->request('POST', "/payments/{$id}/refund{$query}", $parameters));
     }
 
     /**
      * Refund a payment with specified amount
      * @param int $id
      * @param int $amount
+     * @param bool $async
      * @return \Kameli\Quickpay\Entities\Payment
      */
-    public function refundAmount($id, $amount)
+    public function refundAmount($id, $amount, $async = false)
     {
-        return $this->refund($id, ['amount' => $amount]);
+        return $this->refund($id, ['amount' => $amount], $async);
     }
 
     /**
      * Cancel a payment
      * @param int $id
      * @param array $parameters
+     * @param bool $async
      * @return \Kameli\Quickpay\Entities\Payment
      */
-    public function cancel($id, $parameters = [])
+    public function cancel($id, $parameters = [], $async = false)
     {
-        return new Payment($this->client->request('POST', "/payments/{$id}/cancel?synchronized", $parameters));
+        $query = $async ? '' : '?synchronized';
+
+        return new Payment($this->client->request('POST', "/payments/{$id}/cancel{$query}", $parameters));
     }
 
     /**
      * Renew a payment
      * @param int $id
      * @param array $parameters
+     * @param bool $async
      * @return \Kameli\Quickpay\Entities\Payment
      */
-    public function renew($id, $parameters = [])
+    public function renew($id, $parameters = [], $async = false)
     {
-        return new Payment($this->client->request('POST', "/payments/{$id}/renew?synchronized", $parameters));
+        $query = $async ? '' : '?synchronized';
+
+        return new Payment($this->client->request('POST', "/payments/{$id}/renew{$query}", $parameters));
     }
 }
